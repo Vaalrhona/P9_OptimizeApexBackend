@@ -19,9 +19,20 @@ private class testUpdateAccountCA {
         Order o1 = new Order(AccountId = acc1.Id);
         insert o1;
 
-        OrderItem oi1 = new OrderItemItem (OrderId = o1.Id, PricebookEntryId = pbe.Id, Quantity=10, UnitPrice = 150);
+        OrderItem oi1 = new OrderItem (OrderId = o1.Id, PricebookEntryId = pbe.Id, Quantity=10, UnitPrice = 150);
         insert oi1;
-        OrderItem oi2 = new OrderItemItem (OrderId = o1.Id, PricebookEntryId = pbe.Id, Quantity=20, UnitPrice = 1000);
-        insert oi2;        
+        OrderItem oi2 = new OrderItem (OrderId = o1.Id, PricebookEntryId = pbe.Id, Quantity=20, UnitPrice = 1000);
+        insert oi2;
+
+        Account result = [SELECT Account,Chiffre_d_affaires__c FROM Account WHERE ID = :acc1.ID];
+        System.assertEquals(21500, result.Chiffre_d_affaire__c);
+
+        oi1.Quantity = oi1.Quantity*2;
+        update oi1;
+        oi2.Quantity = oi1.Quantity*2;
+        update oi2;
+
+        result = [SELECT Account,Chiffre_d_affaires__c FROM Account WHERE ID = :acc1.ID];
+        System.assertEquals(43000, result.Chiffre_d_affaire__c);
     }
 }

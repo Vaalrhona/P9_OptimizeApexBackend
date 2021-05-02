@@ -1,4 +1,4 @@
-trigger UpdateAccountCA on Order (after update) {
+trigger UpdateAccountCA on Order (after insert, after update) {
 
     List<Account> accountsToUpdate = new List<Account>();
     Map<Id, Decimal> subAmount = new Map<Id, Decimal>();
