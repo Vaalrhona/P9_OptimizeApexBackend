@@ -1,41 +1,33 @@
-trigger UpdateAccountCA on Order (after insert, after update) {
+trigger UpdateAccountCA on Order (after update) {
 
     List<Account> accountsToUpdate = new List<Account>();
     Map<Id, Decimal> subAmount = new Map<Id, Decimal>();
     Map<Id, Decimal> addAmount = new Map<Id, Decimal>();
-    List<Order> orders = new List<Order>();
 
     for(Order o: Trigger.new){
+        subAmount.put(o.AccountID,0.0);
+        addAmount.put(o.AccountID,0.0);
         Order oldOrder = Trigger.oldMap.get(o.ID);
-        if(o.TotalAmount<>oldOrder.TotalAmount){
-            orders.add(o);
-            if(subAmount.containsKey(o.AccountID)){
-                Decimal previousAmount = subAmount.get(o.AccountID);
-                subAmount.put(o.AccountID,previousAmount+o.TotalAmount);
-            }
-            else{
-                subAmount.put(o.AccountID, oldOrder.TotalAmount);
-            }
-            if(addAmount.containsKey(o.AccountID)){
-                Decimal previousAmount = addAmount.get(o.AccountID);
-                addAmount.put(o.AccountID,previousAmount+o.TotalAmount);
-            }
-            else{
-                addAmount.put(o.AccountID, o.TotalAmount);
-            }
-        }
+        Decimal previousSubAmount = subAmount.get(o.AccountID);
+        subAmount.put(o.AccountID,previousSubAmount+o.TotalAmount);
+
+        Decimal previousAddAmount = addAmount.get(o.AccountID);
+        addAmount.put(o.AccountID,previousAddAmount+o.TotalAmount);
     }
 
-    for(Account a: [SELECT ID, Chiffre_d_affaire__c, (SELECT ID FROM Orders WHERE ID IN: orders) FROM Account]){
+    for(Account a: [SELECT ID, Chiffre_d_affaire__c, (SELECT ID FROM Orders WHERE ID IN: Trigger.new) FROM Account]){
         for(Order o: a.Orders){
-            Decimal subAmount = subAmount.get(a.ID);
-            Decimal addAmount = addAmount.get(a.ID);
-            a.Chiffre_d_affaire__c = (a.Chiffre_d_affaire__c-subAmount>0)?a.Chiffre_d_affaire__c-subAmount:0;
+            Decimal subAmount = (subAmount.get(a.ID)!=null)?subAmount.get(a.ID):0;
+            Decimal addAmount = (addAmount.get(a.ID)!=null)?addAmount.get(a.ID):0;
+
+
+            Decimal CA = (a.Chiffre_d_affaire__c!=null)?a.Chiffre_d_affaire__c:0;
+            if(Trigger.isUpdate){
+                a.Chiffre_d_affaire__c = (CA-subAmount>=0)?CA-subAmount:0;
+            }
             a.Chiffre_d_affaire__c = a.Chiffre_d_affaire__c + addAmount;
-            //a.Chiffre_d_affaire__c = a.Chiffre_d_affaire__c + o.TotalAmount;
         }
         accountsToUpdate.add(a);
     }
     update accountsToUpdate;
 }
-

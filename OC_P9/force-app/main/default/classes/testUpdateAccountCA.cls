@@ -4,7 +4,7 @@ private class testUpdateAccountCA {
         Account acc1 = new Account(Name = 'Test Account 1');
         insert acc1;
 
-        Product2 pd1 = new Product2(Name = 'Chemise Verte longue XYX', Family = 'Chemise');
+        Product2 pd1 = new Product2(Name = 'Chemise Verte longue XYX', Family = 'Chemise', IsActive = true);
         Insert pd1;
  
         //Create the PricebookEntry
@@ -16,7 +16,7 @@ private class testUpdateAccountCA {
         );
         Insert pbe;
 
-        Order o1 = new Order(AccountId = acc1.Id);
+        Order o1 = new Order(AccountId = acc1.Id, EffectiveDate=System.today(), Status='Draft', Pricebook2Id=Test.getStandardPricebookId(),ShipmentCost__c=20);
         insert o1;
 
         OrderItem oi1 = new OrderItem (OrderId = o1.Id, PricebookEntryId = pbe.Id, Quantity=10, UnitPrice = 150);
@@ -24,7 +24,10 @@ private class testUpdateAccountCA {
         OrderItem oi2 = new OrderItem (OrderId = o1.Id, PricebookEntryId = pbe.Id, Quantity=20, UnitPrice = 1000);
         insert oi2;
 
-        Account result = [SELECT Account,Chiffre_d_affaires__c FROM Account WHERE ID = :acc1.ID];
+        Order oResult = [SELECT ID, TotalAmount FROM Order WHERE ID = :o1.ID];
+        System.assertEquals(21500, oResult.TotalAmount);
+
+        Account result = [SELECT ID,Chiffre_d_affaire__c FROM Account WHERE ID = :acc1.ID];
         System.assertEquals(21500, result.Chiffre_d_affaire__c);
 
         oi1.Quantity = oi1.Quantity*2;
@@ -32,7 +35,7 @@ private class testUpdateAccountCA {
         oi2.Quantity = oi1.Quantity*2;
         update oi2;
 
-        result = [SELECT Account,Chiffre_d_affaires__c FROM Account WHERE ID = :acc1.ID];
+        result = [SELECT ID,Chiffre_d_affaire__c FROM Account WHERE ID = :acc1.ID];
         System.assertEquals(43000, result.Chiffre_d_affaire__c);
     }
 }
