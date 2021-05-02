@@ -258,3 +258,11 @@ declare module "@salesforce/schema/Order.LastReferencedDate" {
   const LastReferencedDate:any;
   export default LastReferencedDate;
 }
+declare module "@salesforce/schema/Order.NetAmount__c" {
+  const NetAmount__c:number;
+  export default NetAmount__c;
+}
+declare module "@salesforce/schema/Order.ShipmentCost__c" {
+  const ShipmentCost__c:number;
+  export default ShipmentCost__c;
+}

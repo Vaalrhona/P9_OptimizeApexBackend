@@ -73,6 +73,14 @@ global class Account {
     global Id DandbCompanyId;
     global OperatingHours OperatingHours;
     global Id OperatingHoursId;
+    global String CustomerPriority__c;
+    global String SLA__c;
+    global String Active__c;
+    global Double NumberofLocations__c;
+    global String UpsellOpportunity__c;
+    global String SLASerialNumber__c;
+    global Date SLAExpirationDate__c;
+    global Decimal Chiffre_d_affaire__c;
     global List<Account> ChildAccounts;
     global List<AccountCleanInfo> AccountCleanInfos;
     global List<AccountContactRole> AccountContactRoles;
@@ -102,7 +110,6 @@ global class Account {
     global List<Entitlement> Entitlements;
     global List<EntitySubscription> FeedSubscriptionsForEntity;
     global List<Event> Events;
-    global List<MaintenancePlan> MaintenancePlans;
     global List<Note> Notes;
     global List<NoteAndAttachment> NotesAndAttachments;
     global List<OpenActivity> OpenActivities;
@@ -113,8 +120,6 @@ global class Account {
     global List<Partner> PartnersTo;
     global List<ProcessInstance> ProcessInstances;
     global List<ProcessInstanceHistory> ProcessSteps;
-    global List<ProductRequest> ProductRequests;
-    global List<ProductRequestLineItem> ProductRequestLineItems;
     global List<RecordAction> RecordActions;
     global List<RecordActionHistory> RecordActionHistories;
     global List<ResourcePreference> ResourcePreferences;
@@ -141,6 +146,7 @@ global class Account {
     global List<FeedComment> Parent;
     global List<FlowRecordRelation> RelatedRecord;
     global List<Lead> ConvertedAccount;
+    global List<MessagingSession> EndUserAccount;
     global List<OpportunityChangeEvent> Account;
     global List<OutgoingEmail> RelatedTo;
     global List<ServiceContractChangeEvent> Account;

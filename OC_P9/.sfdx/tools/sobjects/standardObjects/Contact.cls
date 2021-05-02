@@ -73,6 +73,8 @@ global class Contact {
     global String CleanStatus;
     global Individual Individual;
     global Id IndividualId;
+    global String Level__c;
+    global String Languages__c;
     global List<AcceptedEventRelation> AcceptedEventRelations;
     global List<AccountContactRole> AccountContactRoles;
     global List<ActivityHistory> ActivityHistories;
@@ -101,7 +103,7 @@ global class Contact {
     global List<Event> Events;
     global List<EventRelation> EventRelations;
     global List<ListEmailIndividualRecipient> ListEmailIndividualRecipients;
-    global List<MaintenancePlan> MaintenancePlans;
+    global List<MessagingSession> MessagingSessions;
     global List<Note> Notes;
     global List<NoteAndAttachment> NotesAndAttachments;
     global List<OpenActivity> OpenActivities;

@@ -72,12 +72,13 @@ global class Order {
     global Datetime SystemModstamp;
     global Datetime LastViewedDate;
     global Datetime LastReferencedDate;
+    global Decimal NetAmount__c;
+    global Decimal ShipmentCost__c;
     global List<ActivityHistory> ActivityHistories;
     global List<AttachedContentDocument> AttachedContentDocuments;
     global List<Attachment> Attachments;
     global List<CombinedAttachment> CombinedAttachments;
     global List<ContentDocumentLink> ContentDocumentLinks;
-    global List<DigitalSignature> DigitalSignatures;
     global List<EmailMessage> Emails;
     global List<EntitySubscription> FeedSubscriptionsForEntity;
     global List<Event> Events;
