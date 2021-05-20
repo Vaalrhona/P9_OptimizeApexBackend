@@ -7,12 +7,12 @@ public with sharing class Test02_BatchAccountCA {
         List <Order> orders = new List<Order>();
         List<OrderItem> items = new List<OrderItem>();
 
-        for(integer i = 0; i<250; i++){
+        for(integer i = 0; i<250; i++){ //creating as much accs as possible
            Account a = new Account(Name='testAccount'+ i); 
            accns.add(a);
         }
         insert accns;
-
+        //giving all of them one order
         for(Account a: accns){
             Order o = new Order(AccountId = a.Id, EffectiveDate=System.today(), Status='Ordered', Pricebook2Id=Test.getStandardPricebookId(),ShipmentCost__c=20);
             orders.add(o);
@@ -47,7 +47,7 @@ public with sharing class Test02_BatchAccountCA {
         Test.stopTest();
 
         List<Account> result = [SELECT ID, Chiffre_d_affaire__c FROM Account WHERE ID IN (SELECT AccountID FROM Order WHERE Status = 'Ordered')];
-        for(Account a: result){
+        for(Account a: result){ //making sure that all accounts have an updated CA
             System.assertEquals(21500, a.Chiffre_d_affaire__c);
         }
     }

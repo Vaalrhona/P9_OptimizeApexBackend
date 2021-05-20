@@ -26,19 +26,19 @@ private class testUpdateAccountCA {
 
         Test.startTest();
         Order oResult = [SELECT ID, TotalAmount, NetAmount__c FROM Order WHERE ID = :o1.ID];
-        System.assertEquals(21500, oResult.TotalAmount);
+        System.assertEquals(21500, oResult.TotalAmount); //The total amount = o1 quantity * o1 price + o2 quantity * o2 price
         System.assertEquals(21480, oResult.NetAmount__c);//totalamount - shippingcost
 
         Account result = [SELECT ID,Chiffre_d_affaire__c FROM Account WHERE ID = :acc1.ID];
-        System.assertEquals(21500, result.Chiffre_d_affaire__c);
+        System.assertEquals(21500, result.Chiffre_d_affaire__c); //CA = order total amount (we only have one order here)
 
         oi1.Quantity = oi1.Quantity*2;
         update oi1;
         oi2.Quantity = oi1.Quantity*2;
         update oi2;
 
-        result = [SELECT ID,Chiffre_d_affaire__c FROM Account WHERE ID = :acc1.ID];
-        System.assertEquals(43000, result.Chiffre_d_affaire__c);
+        result = [SELECT ID,Chiffre_d_affaire__c FROM Account WHERE ID = :acc1.ID]; //changing the order items total value to change the order total amount
+        System.assertEquals(43000, result.Chiffre_d_affaire__c); //checking if CA is still equal to the order total amount
         Test.stopTest();
     }
 }
