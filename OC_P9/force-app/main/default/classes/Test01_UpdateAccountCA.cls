@@ -24,6 +24,7 @@ private class testUpdateAccountCA {
         OrderItem oi2 = new OrderItem (OrderId = o1.Id, PricebookEntryId = pbe.Id, Quantity=20, UnitPrice = 1000);
         insert oi2;
 
+        Test.startTest();
         Order oResult = [SELECT ID, TotalAmount, NetAmount__c FROM Order WHERE ID = :o1.ID];
         System.assertEquals(21500, oResult.TotalAmount);
         System.assertEquals(21480, oResult.NetAmount__c);//totalamount - shippingcost
@@ -38,5 +39,6 @@ private class testUpdateAccountCA {
 
         result = [SELECT ID,Chiffre_d_affaire__c FROM Account WHERE ID = :acc1.ID];
         System.assertEquals(43000, result.Chiffre_d_affaire__c);
+        Test.stopTest();
     }
 }
