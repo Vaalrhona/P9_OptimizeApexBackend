@@ -7,13 +7,13 @@ global class Batch01_UpdateAccountCA implements Database.Batchable<sObject>{
    }
     
    global void execute(Database.BatchableContext info, List<Account> scope){
-       List<Account> accountsToUpdate = new List<Account>();      
+       List<Account> accountsToUpdate = new List<Account>();
+       Map<ID,AggregateResult> sumOfTotalAmount = new Map<ID,AggregateResult>([SELECT AccountID, SUM(TotalAmount) total FROM Order WHERE AccountID IN :scope GROUP BY AccountID]);
        //for each account in the scope, we get the orders associated if there's some
-       for(Account a: [SELECT ID, Chiffre_d_affaire__c, (SELECT ID, TotalAmount FROM Orders) FROM Account WHERE ID IN :scope]){
+       for(Account a: scope){
+           Decimal amount = (Decimal)sumOfTotalAmount.get(a.ID).get('total');
            a.Chiffre_d_affaire__c = (a.Chiffre_d_affaire__c!=null)?a.Chiffre_d_affaire__c:0;
-           for(Order o: a.Orders){ //then we go through each order per account to add the total amount to the account CA
-               a.Chiffre_d_affaire__c = a.Chiffre_d_affaire__c + o.TotalAmount;
-           }
+           a.Chiffre_d_affaire__c = a.Chiffre_d_affaire__c + amount;
            accountsToUpdate.add(a);
        }
        
