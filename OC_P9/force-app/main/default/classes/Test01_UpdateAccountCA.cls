@@ -8,9 +8,9 @@ private class Test01_UpdateAccountCA {
     @isTest static void test() {
         Test.startTest();
         List<OrderItem> items = [SELECT ID,Quantity,OrderID,Order.AccountID FROM OrderItem WHERE Order.Account.Name LIKE 'testAccount%'];
-        Order oResult = [SELECT ID, TotalAmount, NetAmount__c FROM Order WHERE ID = :items[0].OrderID];
+        Order oResult = [SELECT ID, TotalAmount, Net_Amount__c FROM Order WHERE ID = :items[0].OrderID];
         System.assertEquals(21500, oResult.TotalAmount); //The total amount = o1 quantity * o1 price + o2 quantity * o2 price
-        System.assertEquals(21480, oResult.NetAmount__c);//totalamount - shippingcost
+        System.assertEquals(21480, oResult.Net_Amount__c);//totalamount - shippingcost
 
         Account result = [SELECT ID,Chiffre_d_affaire__c FROM Account WHERE ID = :items[0].Order.AccountID];
         System.assertEquals(21500, result.Chiffre_d_affaire__c); //CA = order total amount (we only have one order here)

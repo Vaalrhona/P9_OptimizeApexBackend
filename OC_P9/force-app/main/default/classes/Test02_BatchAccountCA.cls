@@ -3,7 +3,7 @@ public with sharing class Test02_BatchAccountCA {
 
     @TestSetup
     static void makeData(){
-        Test00_TestDataFactory.createAccounts(500);
+        Test00_TestDataFactory.createAccounts(900);
     }
     
     @isTest
