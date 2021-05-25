@@ -7,17 +7,7 @@ global class Batch01_UpdateAccountCA implements Database.Batchable<sObject>{
    }
     
    global void execute(Database.BatchableContext info, List<Account> scope){
-       List<Account> accountsToUpdate = new List<Account>();
-       Map<ID,AggregateResult> sumOfTotalAmount = new Map<ID,AggregateResult>([SELECT AccountID, SUM(TotalAmount) total FROM Order WHERE AccountID IN :scope GROUP BY AccountID]);
-       //for each account in the scope, we get the orders associated if there's some
-       for(Account a: scope){
-           Decimal amount = (Decimal)sumOfTotalAmount.get(a.ID).get('total');
-           a.Chiffre_d_affaire__c = (a.Chiffre_d_affaire__c!=null)?a.Chiffre_d_affaire__c:0;
-           a.Chiffre_d_affaire__c = a.Chiffre_d_affaire__c + amount;
-           accountsToUpdate.add(a);
-       }
-       
-       update scope;
+       Handler01_AccountHandler.batchUpdateAccount(scope);
    }    
     
    global void finish(Database.BatchableContext info){     
